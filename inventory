@@ -1,0 +1,11 @@
+
+[servers]
+
+192.168.56.114 ansible_python_interpreter=/usr/bin/python3
+192.168.56.111 ansible_python_interpreter=/usr/bin/python3
+
+192.168.56.114 python_package=python3 pip_package=python3-pip
+192.168.56.111 python_package=python3 pip_package=python3-pip
+
+192.168.56.114 java_package=openjdk-8-jdk
+192.168.56.111 java_package=java-1.8.0-openjdk

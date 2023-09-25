@@ -1,0 +1,71 @@
+---
+- name: Configure Manage Nodes
+  hosts: all
+  become: yes
+  become_user: root
+  vars_files:
+    - config.yaml
+
+  tasks:
+    - name: Update package cache on Ubuntu
+      apt:
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Update package cache on CentOS
+      yum:
+        name: "*"
+        state: latest
+      when: ansible_distribution == 'CentOS'
+
+    - name: Install Python and Pip
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - python{{ python_version }}
+        - python3-pip
+      become: yes
+      become_user: root
+
+#    - name: Set Python and Pip versions
+ #     alternatives:
+  #      name: python
+   #     path: /usr/bin/python{{ python_version }}
+    #  become: yes
+     # become_user: root
+
+    - name: Install Java OpenJDK on Ubuntu
+      apt:
+        name: "{{ java_package }}"
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+      become: yes
+      become_user: root
+
+    - name: Enable EPEL repository on CentOS
+      command: dnf install -y epel-release
+      when: ansible_distribution == 'CentOS'
+      become: yes
+      become_user: root
+
+    - name: Install Java OpenJDK on CentOS
+      package:
+        name: "{{ java_package }}"
+      when: ansible_distribution == 'CentOS'
+      become: yes
+      become_user: root
+
+    - name: Set MOTD
+      template:
+        src: motd.j2
+        dest: /etc/motd
+      become: yes
+      become_user: root
+
+    - name: Create User
+      user:
+        name: "{{ new_username }}"
+        state: present
+      become: yes
+      become_user: root

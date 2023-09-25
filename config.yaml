@@ -1,0 +1,6 @@
+# config.yaml
+python_version: 3
+pip_version: 3
+motd_text: "Welcome to Ansible Managed Node"
+new_username: eric2
+
